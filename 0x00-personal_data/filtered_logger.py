@@ -8,7 +8,7 @@ import logging
 import os
 import mysql.connector
 
-PII_FIELDS = ['name', 'email', 'phone', 'ssn', 'password']
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
 class RedactingFormatter(logging.Formatter):
@@ -46,7 +46,7 @@ def get_logger() -> logging.Logger:
 
     ch = logging.StreamHandler()
     ch.setLevel(logging.INFO)
-    ch.setFormatter(RedactingFormatter(PII_FIELDS))
+    ch.setFormatter(RedactingFormatter(list(PII_FIELDS)))
 
     logger.addHandler(ch)
     return logger
@@ -55,8 +55,29 @@ def get_logger() -> logging.Logger:
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ returns a connector to database"""
     return mysql.connector.connect(
-        user=os.getenv('PERSONAL_DATA_DB_USERNAME'),
-        password=os.getenv('PERSONAL_DATA_DB_PASSWORD'),
+        user=os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
+        password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
         host=os.getenv('PERSONAL_DATA_DB_HOST'),
         database=os.getenv('PERSONAL_DATA_DB_NAME')
     )
+
+
+def main() -> None:
+    """retrieve all rows from db"""
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELCET * FROM FROM users;")
+    logger = get_logger()
+    headers = []
+    for des in cursor.description:
+        headers.append(des)
+    for row in cursor:
+        ans = ''
+        for r, h in zip(row, headers):
+            ans += f'{h}={r};'
+        logger.info(ans)
+    cursor.close()
+    db.close()
+
+if __name__ == "__main__":
+    main()
