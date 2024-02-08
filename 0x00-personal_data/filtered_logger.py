@@ -5,6 +5,9 @@ declarating filter_datum function
 import re
 from typing import List
 import logging
+import os
+import mysql.connector
+
 PII_FIELDS = ['name', 'email', 'phone', 'ssn', 'password']
 
 
@@ -39,8 +42,22 @@ def get_logger() -> logging.Logger:
     """making logger """
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.info)
+    logger.propagate = False
+
     ch = logging.StreamHandler()
     ch.setLevel(logging.INFO)
     ch.setFormatter(RedactingFormatter(PII_FIELDS))
+
     logger.addHandler(ch)
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """ returns a connector to database"""
+    return mysql.connector.connect(
+        user=os.getenv('PERSONAL_DATA_DB_USERNAME'),
+        password=os.getenv('PERSONAL_DATA_DB_PASSWORD'),
+        host=os.getenv('PERSONAL_DATA_DB_HOST'),
+        database=os.getenv('PERSONAL_DATA_DB_NAME')
+    )
+
