@@ -23,7 +23,6 @@ elif os.getenv('AUTH_TYPE') == 'basic_auth':
     auth = BasicAuth()
 
 
-
 @app.before_request
 def before_request_func():
     """  filtering of each request"""
