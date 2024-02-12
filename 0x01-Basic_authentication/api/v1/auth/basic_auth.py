@@ -62,9 +62,9 @@ class BasicAuth(Auth):
             return None
         base = User()
         search = base.search({"email": user_email})
-        print(search)
         if len(search) == 0:
             return None
+        user = search[0]
         if not user.is_valid_password(user_pwd):
             return None
         return user
