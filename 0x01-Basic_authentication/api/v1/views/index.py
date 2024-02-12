@@ -34,7 +34,7 @@ def authorize():
 
 
 @app_views.route("/forbidden", methods=['GET'], strict_slashes=False)
-def authorize():
+def forbidden():
     """ testing /api/v1/forbidden
     """
     abort(403)
