@@ -5,7 +5,7 @@
 from api.v1.auth.auth import Auth
 import base64
 from models.base import Base
-
+from typing import TypeVar
 from models.user import User
 
 
@@ -60,11 +60,11 @@ class BasicAuth(Auth):
             return None
         if user_pwd is None or not isinstance(user_email, str):
             return None
-        search = Base.search(User, {"email": user_email})
+        base = User()
+        search = base.search({"email": user_email})
+        print(search)
         if len(search) == 0:
             return None
-        user = User(search[0])
         if not user.is_valid_password(user_pwd):
             return None
         return user
-        
