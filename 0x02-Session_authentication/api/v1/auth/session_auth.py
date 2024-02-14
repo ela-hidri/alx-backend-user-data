@@ -31,4 +31,4 @@ class SessionAuth(Auth):
         """returns a cookie value from a request"""
         if request is None:
             return None
-        return request._my_session_id.get('SESSION_NAME')
+        return request.get('SESSION_NAME')
