@@ -2,6 +2,7 @@
 """Module for Auth
 """
 from typing import List, TypeVar
+import os
 
 
 class Auth:
@@ -38,4 +39,4 @@ class Auth:
         """returns a cookie value from a request"""
         if request is None:
             return None
-        return request.get('SESSION_NAME')
+        return request.cookies.get(os.getenv('SESSION_NAME'))
