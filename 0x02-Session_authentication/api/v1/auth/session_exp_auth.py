@@ -46,9 +46,7 @@ class SessionExpAuth(SessionAuth):
             logger.info("no created at")
             return None
         startTime = self.user_id_by_session_id['created_at']
-        session_duration = startTime + timedelta(seconds=self.session_duration)
-        time_diff = datetime.now() - session_duration
-        logger.info(time_diff)
-        if time_diff < timedelta(0):
+        session_end_time = startTime + timedelta(seconds=self.session_duration)
+        if datetime.now() >= session_end_time:
             return None
         return self.user_id_by_session_id['user_id']
