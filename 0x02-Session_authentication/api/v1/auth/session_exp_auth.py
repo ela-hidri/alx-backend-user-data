@@ -47,7 +47,7 @@ class SessionExpAuth(SessionAuth):
         startTime = self.user_id_by_session_id['created_at']
         session_end_time = startTime + timedelta(seconds=self.session_duration)
         logger.info(f'{datetime.now()} : {session_end_time}')
-        if datetime.now() >= session_end_time:
+        if datetime.now() > session_end_time:
             logger.info("time is over")
             return None
         logger.info(self.user_id_by_session_id['user_id'])
