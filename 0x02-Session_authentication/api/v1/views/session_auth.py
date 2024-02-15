@@ -5,11 +5,6 @@ import os
 from api.v1.views import app_views
 from api.v1.views import User
 from flask import abort, jsonify, request
-import logging
-
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
@@ -29,7 +24,6 @@ def login():
         return jsonify({"error": "wrong password"}), 401
     from api.v1.app import auth
     sessin_id = auth.create_session(user.id)
-    logger.info(sessin_id)
     out = jsonify(user.to_json())
     out.set_cookie(os.getenv('SESSION_NAME'), sessin_id)
     return out

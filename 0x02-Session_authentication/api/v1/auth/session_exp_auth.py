@@ -4,11 +4,6 @@
 from datetime import datetime, timedelta
 from api.v1.auth.session_auth import SessionAuth
 import os
-import logging
-
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 class SessionExpAuth(SessionAuth):
@@ -33,22 +28,16 @@ class SessionExpAuth(SessionAuth):
     def user_id_for_session_id(self, session_id=None):
         """ overload user_id_for_session_id """
         if session_id is None:
-            logger.info("session id None")
             return None
         if session_id not in self.user_id_by_session_id:
-            logger.info("session id no in dict")
             return None
         if self.session_duration <= 0:
-            logger.info("duration < 0")
             return self.user_id_by_session_id['user_id']
         if "created_at" not in self.user_id_by_session_id:
-            logger.info("no created at")
             return None
         startTime = self.user_id_by_session_id['created_at']
         session_end_time = startTime + timedelta(seconds=self.session_duration)
-        logger.info(f'{datetime.now()} : {session_end_time}')
         if datetime.now() > session_end_time:
             logger.info("time is over")
             return None
-        logger.info(self.user_id_by_session_id['user_id'])
         return self.user_id_by_session_id['user_id']
