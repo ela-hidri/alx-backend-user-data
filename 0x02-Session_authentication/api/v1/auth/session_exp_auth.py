@@ -26,9 +26,8 @@ class SessionExpAuth(SessionAuth):
         if sessionId is None:
             return None
         self.user_id_by_session_id["session dictionary"] = sessionId
-        self.user_id_by_session_id['user_id'] = sessionId
+        self.user_id_by_session_id['user_id'] = user_id
         self.user_id_by_session_id['created_at'] = datetime.now()
-        logger.info(self.user_id_by_session_id)
         return sessionId
 
     def user_id_for_session_id(self, session_id=None):
@@ -47,6 +46,9 @@ class SessionExpAuth(SessionAuth):
             return None
         startTime = self.user_id_by_session_id['created_at']
         session_end_time = startTime + timedelta(seconds=self.session_duration)
+        logger.info(f'{datetime.now()} : {session_end_time}')
         if datetime.now() >= session_end_time:
+            logger.info("time is over")
             return None
+        logger.info(self.user_id_by_session_id['user_id'])
         return self.user_id_by_session_id['user_id']
