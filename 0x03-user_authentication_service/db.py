@@ -41,7 +41,7 @@ class DB:
         session.commit()
         return user
 
-    def find_user_by(self, **kwargs: Dict) -> User:
+    def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """finds user"""
         query = self._session.query(User)
         try:
