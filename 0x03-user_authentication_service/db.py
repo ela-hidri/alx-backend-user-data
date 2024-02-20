@@ -39,7 +39,7 @@ class DB:
         return user
 
     def find_user_by(self, **kwargs: dict) -> User:
-        """finds user"""
+        """finds user by keyword arguments"""
         query = self._session.query(User)
         try:
             query = query.filter_by(**kwargs)
