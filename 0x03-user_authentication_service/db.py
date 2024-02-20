@@ -2,7 +2,6 @@
 """DB module
 """
 from sqlalchemy import create_engine
-from sqlalchemy.exc import InvalidRequestError, NoResultFound
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -38,15 +37,3 @@ class DB:
         session.add(user)
         session.commit()
         return user
-    
-    def find_user_by(self, **kwargs: dict) -> User:
-        """finds user"""
-        query = self._session.query(User)
-        try:
-            query = query.filter_by(**kwargs)
-        except InvalidRequestError:
-            raise InvalidRequestError
-        result = query.first()
-        if result is None:
-            raise NoResultFound
-        return result
