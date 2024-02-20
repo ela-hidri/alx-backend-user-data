@@ -42,12 +42,22 @@ class DB:
         return user
 
     def find_user_by(self, **kwargs: Dict[str, str]) -> User:
-        """finds user"""
+        """finds user by group arg"""
         query = self._session.query(User)
         try:
-            result = query.filter_by(**kwargs).one()
-        except NoResultFound:
-            raise NoResultFound()
+            result = query.filter_by(**kwargs).first()
         except InvalidRequestError:
             raise InvalidRequestError()
+        if result is None:
+                raise NoResultFound
         return result
+
+    def update_user(self, user_id: int, **kwargs: Dict) -> None:
+        """ updates a user """
+        user = self.find_user_by(id=user_id)
+        for key, val in kwargs.items():
+            if hasattr(user, key):
+                setattr(user, key, val)
+            else:
+                raise ValueError()
+        self._session.commit()
