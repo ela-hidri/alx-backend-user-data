@@ -49,7 +49,7 @@ class DB:
         except InvalidRequestError:
             raise InvalidRequestError()
         if result is None:
-                raise NoResultFound
+            raise NoResultFound()
         return result
 
     def update_user(self, user_id: int, **kwargs: Dict) -> None:
