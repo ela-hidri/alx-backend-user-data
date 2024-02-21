@@ -62,3 +62,12 @@ class Auth:
             return user
         except (NoResultFound, InvalidRequestError):
             return None
+
+    def destroy_session(self, user_id: int) -> None:
+        """ destroys session"""
+        try:
+            user = self._db.find_user_by(user_id=user_id)
+            self._db.update_user(user_id=user.id, session_id=None)
+        except (NoResultFound, InvalidRequestError, ValueError):
+            return None
+        return None
