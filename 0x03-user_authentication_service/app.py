@@ -3,6 +3,7 @@
 """
 from flask import Flask, jsonify, request, abort, redirect, url_for
 from auth import Auth
+from sqlalchemy.orm.exc import NoResultFound
 
 app = Flask("__name__")
 AUTH = Auth()
@@ -64,6 +65,19 @@ def method_name():
     if user is None:
         abort(403)
     return jsonify({"email": user.email}), 200
+
+
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
+def get_reset_password_token():
+    """ reset password"""
+    email = request.form.get('email')
+    try:
+        reset_token = AUTH.get_reset_password_token(email)
+    except NoResultFound:
+        abort(403)
+    return jsonify({"email": email, "reset_token": reset_token}), 200
+
+
 
 
 if __name__ == "__main__":
