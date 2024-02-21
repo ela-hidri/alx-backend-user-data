@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Auth module
 """
+from typing import Union
 import bcrypt
 from db import DB
 from user import User
@@ -53,3 +54,11 @@ class Auth:
         except (NoResultFound, InvalidRequestError, ValueError):
             return None
         return uuid
+
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
+        """ returns the corresponding User or None """
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+            return user
+        except (NoResultFound, InvalidRequestError):
+            return None
