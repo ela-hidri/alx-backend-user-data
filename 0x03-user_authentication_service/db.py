@@ -41,7 +41,7 @@ class DB:
         session.commit()
         return user
 
-    def find_user_by(self, **kwargs: Dict[str, str]) -> User:
+    def find_user_by(self, **kwargs: Dict[str, Any]) -> User:
         """
          find user by grouup args
         """
