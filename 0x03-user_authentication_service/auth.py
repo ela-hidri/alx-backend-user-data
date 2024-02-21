@@ -71,3 +71,13 @@ class Auth:
         except (NoResultFound, InvalidRequestError, ValueError):
             return None
         return None
+
+    def get_reset_password_token(self, email:str) -> str:
+        """ generet reset token"""
+        try:
+            user = self._db.find_user_by(email=email)
+            uuid = _generate_uuid()
+            self._db.update_user(user_id=user.id, session_id=uuid)
+        except (NoResultFound, InvalidRequestError, ValueError):
+                raise ValueError
+        return uuid
