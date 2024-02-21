@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """app module
 """
-from flask import Flask, jsonify, request, abort, redirect
+from flask import Flask, jsonify, request, abort, redirect, url_for
 from auth import Auth
 
 app = Flask("__name__")
@@ -50,7 +50,7 @@ def logout():
         abort(403)
     else:
         AUTH.destroy_session(session_id)
-        return redirect("/")
+        return redirect(url_for("hello"))
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
@@ -61,7 +61,7 @@ def method_name():
     if user is None:
         abort(403)
     else:
-        return jsonify({"email": user.email})
+        return jsonify({"email": user.email}), 200
 
 
 if __name__ == "__main__":
