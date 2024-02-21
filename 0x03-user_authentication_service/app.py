@@ -70,7 +70,9 @@ def method_name():
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
 def get_reset_password_token():
     """ reset password"""
-    email = request.get('email')
+    email = request.form.get('email')
+    if email is None:
+        abort(403)
     try:
         reset_token = AUTH.get_reset_password_token(email)
     except NoResultFound:
